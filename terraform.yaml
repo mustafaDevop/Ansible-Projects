@@ -1,0 +1,10 @@
+---
+- name: Install Terraform
+  hosts: your_ubuntu_hosts
+  become: yes
+
+  tasks:
+    - name: Install specific version of Terraform using apt
+      apt:
+        name: "terraform=1.4.4-*"
+        state: present

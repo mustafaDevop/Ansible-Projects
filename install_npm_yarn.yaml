@@ -1,0 +1,31 @@
+---
+- name: Install Node.js, npm, and Yarn with apt
+  hosts: your_ubuntu_hosts
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Node.js using apt-get
+      apt:
+        name: ["nodejs"]
+        state: present
+
+    - name: Add Node.js PPA for npm
+      apt_repository:
+        repo: "ppa:deadsnakes/ppa"
+        state: present
+
+    - name: Update apt cache after adding PPA
+      apt:
+        update_cache: yes
+
+    - name: Install npm using apt
+      apt:
+        name: ["npm"]
+        state: present
+
+    - name: Install Yarn using npm
+      command: npm install --global yarn
