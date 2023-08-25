@@ -4,7 +4,7 @@
   become: yes
 
   tasks:
-    - name: Install specific version of Terraform using apt
+    - name: Installation of Terraform using apt
       apt:
         name: "terraform=1.4.4-*"
         state: present
