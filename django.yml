@@ -1,0 +1,29 @@
+---
+- name: Install Django
+  hosts: your_target_servers
+  become: yes # Use sudo to become a privileged user
+
+  tasks:
+    - name: Update APT Package Cache
+      apt:
+        update_cache: yes
+      when: ansible_distribution == 'Ubuntu' # Adjust for other Linux distributions
+
+    - name: Install Python and pip
+      apt:
+        name: ["python3", "python3-pip"]
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install Django using pip
+      pip:
+        name: django
+        state: latest
+
+    - name: Verify Django installation
+      command: python3 -m django --version
+      register: django_version_output
+
+    - name: Display Django Version
+      debug:
+        var: django_version_output.stdout
