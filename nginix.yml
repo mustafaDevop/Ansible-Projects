@@ -1,0 +1,22 @@
+---
+- name: Install Nginx
+  hosts: your_nginx_servers
+  become: yes # Use sudo to become root or another privileged user
+
+  tasks:
+    - name: Update apt cache (for Ubuntu/Debian)
+      apt:
+        update_cache: yes
+      when: ansible_distribution in ['Ubuntu', 'Debian']
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+      when: ansible_distribution in ['Ubuntu', 'Debian']
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
