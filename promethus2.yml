@@ -1,0 +1,52 @@
+---
+- name: Install Prometheus
+  hosts: your_target_servers
+  become: yes # Use sudo to become a privileged user
+
+  tasks:
+    - name: Download Prometheus tarball
+      get_url:
+        url: https://github.com/prometheus/prometheus/releases/download/v2.33.1/prometheus-2.33.1.linux-amd64.tar.gz
+        dest: /tmp/prometheus.tar.gz
+
+    - name: Extract Prometheus tarball
+      ansible.builtin.unarchive:
+        src: /tmp/prometheus.tar.gz
+        dest: /opt/
+        remote_src: yes
+      become: yes
+
+    - name: Rename Prometheus directory
+      command: mv /opt/prometheus-2.33.1.linux-amd64 /opt/prometheus
+      become: yes
+
+    - name: Create Prometheus configuration directory
+      command: mkdir -p /etc/prometheus
+      become: yes
+
+    - name: Create Prometheus data directory
+      command: mkdir -p /var/lib/prometheus/data
+      become: yes
+
+    - name: Create Prometheus configuration file
+      copy:
+        src: /path/to/prometheus.yml
+        dest: /etc/prometheus/prometheus.yml
+      become: yes
+
+    - name: Create systemd service for Prometheus
+      copy:
+        src: /path/to/prometheus.service
+        dest: /etc/systemd/system/prometheus.service
+      become: yes
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+      become: yes
+
+    - name: Start Prometheus service
+      systemd:
+        name: prometheus
+        state: started
+        enabled: yes
