@@ -1,0 +1,29 @@
+---
+- name: Install AWS CLI
+  hosts: your_target_host
+  become: yes # Use sudo to become root or another privileged user
+
+  tasks:
+    - name: Install AWS CLI on Linux
+      ansible.builtin.package:
+        name: awscli
+        state: present
+
+    # Optional: You can configure AWS CLI if needed.
+    - name: Configure AWS CLI
+      command: aws configure
+      args:
+        stdin: |
+          YOUR_AWS_ACCESS_KEY_ID
+          YOUR_AWS_SECRET_ACCESS_KEY
+          YOUR_DEFAULT_REGION
+          json
+
+    # Optional: Validate AWS CLI installation by displaying version information.
+    - name: Verify AWS CLI Installation
+      command: aws --version
+      register: aws_version_output
+
+    - name: Display AWS CLI Version
+      debug:
+        var: aws_version_output.stdout
