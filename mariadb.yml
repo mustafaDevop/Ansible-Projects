@@ -1,0 +1,26 @@
+---
+- name: Install MariaDB
+  hosts: your_target_servers
+  become: yes # Use sudo to become a privileged user
+
+  tasks:
+    - name: Update APT Package Cache
+      apt:
+        update_cache: yes
+      when: ansible_distribution == 'Ubuntu' # Adjust for other Linux distributions
+
+    - name: Install MariaDB Server
+      apt:
+        name: mariadb-server
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Start MariaDB Service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    - name: Secure MariaDB Installation (optional)
+      command: mysql_secure_installation
+      ignore_errors: yes
