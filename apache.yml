@@ -1,0 +1,22 @@
+---
+- name: Install and Configure Apache
+  hosts: your_apache_servers
+  become: yes # Use sudo to become root or another privileged user
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: ansible_distribution in ['Ubuntu', 'Debian']
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+      when: ansible_distribution in ['Ubuntu', 'Debian']
+
+    - name: Start Apache service
+      service:
+        name: apache2
+        state: started
+        enabled: yes
