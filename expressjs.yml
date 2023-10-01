@@ -1,0 +1,29 @@
+---
+- name: Deploy Express.js Application
+  hosts: your_target_servers
+  become: yes # Use sudo to become a privileged user
+
+  tasks:
+    - name: Install Node.js and npm
+      apt:
+        name: ["nodejs", "npm"]
+        state: present
+      become: yes
+      tags: nodejs
+
+    - name: Copy Express.js application code
+      copy:
+        src: /path/to/your/express/app
+        dest: /path/on/remote/server
+      tags: app
+
+    - name: Install project dependencies
+      npm:
+        path: /path/on/remote/server
+      tags: app
+
+    - name: Start Express.js application
+      shell: "node /path/on/remote/server/app.js"
+      async: 3600
+      poll: 0
+      tags: app
