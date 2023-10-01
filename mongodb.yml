@@ -1,0 +1,30 @@
+---
+- name: Install MongoDB
+  hosts: your_target_servers
+  become: yes # Use sudo to become root or another privileged user
+
+  tasks:
+    - name: Import MongoDB GPG Key
+      apt_key:
+        url: https://www.mongodb.org/static/pgp/server-5.0.asc
+        state: present
+
+    - name: Add MongoDB APT Repository
+      apt_repository:
+        repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse
+        state: present
+
+    - name: Update APT Cache
+      apt:
+        update_cache: yes
+
+    - name: Install MongoDB
+      apt:
+        name: mongodb-org
+        state: present
+
+    - name: Start MongoDB Service
+      service:
+        name: mongod
+        state: started
+        enabled: yes
